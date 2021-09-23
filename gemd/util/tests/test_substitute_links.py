@@ -47,12 +47,12 @@ def test_native_id_substitution():
 
     # Turn the material pointer into a LinkByUID using native_id
     subbed = substitute_links(meas, native_uid=native_id)
-    assert subbed.material == LinkByUID.from_entity(mat, name=native_id)
+    assert subbed.material == LinkByUID.from_entity(mat, scope=native_id)
 
     # Put the measurement into a list and convert that into a LinkByUID using native_id
     measurements_list = [meas]
     subbed = substitute_links(measurements_list, native_uid=native_id)
-    assert subbed == [LinkByUID.from_entity(meas, name=native_id)]
+    assert subbed == [LinkByUID.from_entity(meas, scope=native_id)]
 
 
 def test_object_key_substitution():
@@ -64,12 +64,12 @@ def test_object_key_substitution():
 
     subbed = substitute_links(process_dict, native_uid='auto')
     for key, value in subbed.items():
-        assert key == LinkByUID.from_entity(spec, name='auto')
-        assert LinkByUID.from_entity(run1, name='auto') in value
+        assert key == LinkByUID.from_entity(spec, scope='auto')
+        assert LinkByUID.from_entity(run1, scope='auto') in value
         assert LinkByUID.from_entity(run2) in value
 
     reverse_process_dict = {run2: spec}
     subbed = substitute_links(reverse_process_dict, native_uid='auto')
     for key, value in subbed.items():
         assert key == LinkByUID.from_entity(run2)
-        assert value == LinkByUID.from_entity(spec, name='auto')
+        assert value == LinkByUID.from_entity(spec, scope='auto')
